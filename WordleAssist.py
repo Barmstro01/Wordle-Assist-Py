@@ -1,8 +1,11 @@
-from operator import contains
-
 class WordleAssist:
     # def __init__(this, word_list):
         # this.word_list = []
+    def check_pres(self, sub, test_str):
+        for ele in sub:
+            if ele in test_str:
+                return 0
+        return 1    
 
     def get_word_list(self):
         with open('word_list_abrev.txt', 'r') as f:
@@ -10,14 +13,16 @@ class WordleAssist:
         return word_list
 
     def prompt_guess(self, word_list):
+        print(word_list)
         guesses_remaining = 6
         while guesses_remaining > 0:
             guess = input("Please enter your guess: ")
             print(f"You guessed: {guess} and have {guesses_remaining - 1}"
                 " guesses remaining")
             hints = self.prompt_correctness(guess)
-            self.incorrect_pairs(guess, hints, word_list)
+            word_list = self.incorrect_pairs(guess, hints, word_list)
             guesses_remaining -= 1
+            print(word_list)
     
     def prompt_correctness(self, guess):
         hint = [0,0,0,0,0]
@@ -33,8 +38,9 @@ class WordleAssist:
             hints = hint[h]
             if hints == '0':
                 guessed = guess[h]
-                print(f"Found {guessed}")
+                res = [ele for ele in word_list if self.check_pres(ele, guessed)]
             h += 1
+        return res
                 
             
 new_assist = WordleAssist()
